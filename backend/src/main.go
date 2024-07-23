@@ -1,16 +1,23 @@
 package main
 
 import (
+	"backend/src/controllers"
+	"backend/src/db"
 	"backend/src/types"
 	"encoding/json"
 	"net/http"
 )
 
 func main() {
-	db.init()
+	db.Init()
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /", HomeHandler)
+	mux.HandleFunc("GET /users", controllers.GetUsers)
+	mux.HandleFunc("POST /users", controllers.CreateUser)
+	mux.HandleFunc("POST /command", controllers.RunCommand)
+	mux.HandleFunc("GET /containers", controllers.GetPodmanContainers)
+
 
 	handler := corsMiddleware(mux)
 

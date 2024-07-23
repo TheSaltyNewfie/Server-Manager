@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func init() {
+func Init() {
 	db, err := gorm.Open(sqlite.Open("database.db"), &gorm.Config{})
 	
 	if err != nil {
@@ -15,5 +15,5 @@ func init() {
 	}
 
 	db.AutoMigrate(&models.User{})
-
+	db.AutoMigrate(&models.AuditLog{})
 }
