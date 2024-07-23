@@ -2,26 +2,39 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
-	"io"
 	"net/http"
 	"os/exec"
 )
 
 func RunCommand(w http.ResponseWriter, r *http.Request) {
-	
-	body, err := io.ReadAll(r.Body)
+	var cmd struct {
+		Cmd string `json:"cmd"`
+		User int `json:"user"`
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&cmd)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	commands := string(body)
+	command := cmd.Cmd
 
-	cmd := exec.Command("sh", "-c", commands)
+	execCmd := exec.Command("sh", "-c", command)
 
-	fmt.Printf("Running command: %s\n", commands)
+	output, err := execCmd.CombinedOutput()
+
+	if err != nil {
+		panic("Something failed here")
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(output)
+}
+
+func GetPodmanContainers(w http.ResponseWriter, r *http.Request) {
+	cmd := exec.Command("podman", "ps", "-a")
 
 	output, err := cmd.CombinedOutput()
 

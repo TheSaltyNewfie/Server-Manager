@@ -15,4 +15,5 @@ func Init() {
 	}
 
 	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.AuditLog{})
 }
