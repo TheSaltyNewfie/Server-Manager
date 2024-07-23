@@ -29,7 +29,11 @@ func RunCommand(w http.ResponseWriter, r *http.Request) {
 
 	output, err := execCmd.CombinedOutput()
 
-	response.Result = string(output)
+	if string(output) == "" {
+		response.Result = "No output"
+	} else {
+		response.Result = string(output)
+	}
 
 	if err != nil {
 		panic("Something failed here")
