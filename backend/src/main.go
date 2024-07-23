@@ -1,27 +1,24 @@
 package main
 
 import (
+	"backend/src/types"
 	"encoding/json"
-	"fmt"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
-type Response struct {
-	Message string `json:"message"`
-}
-
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/", HomeHandler).Methods("GET")
+	db.init()
 
-	fmt.Printf("Hosting at localhost")
-	http.ListenAndServe(":8000", r)
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /", HomeHandler)
+
+	handler := corsMiddleware(mux)
+
+	http.ListenAndServe("0.0.0.0:8000", handler)
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	response := Response {
+	response := types.Response {
 		Message: "Welcome to the server management backend",
 	}
 
