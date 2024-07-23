@@ -12,6 +12,10 @@ func RunCommand(w http.ResponseWriter, r *http.Request) {
 		User int `json:"user"`
 	}
 
+	var response struct {
+		Result string `json:"result"`
+	}
+
 	err := json.NewDecoder(r.Body).Decode(&cmd)
 
 	if err != nil {
@@ -25,12 +29,14 @@ func RunCommand(w http.ResponseWriter, r *http.Request) {
 
 	output, err := execCmd.CombinedOutput()
 
+	response.Result = string(output)
+
 	if err != nil {
 		panic("Something failed here")
 	}
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(output)
+	json.NewEncoder(w).Encode(response)
 }
 
 func GetPodmanContainers(w http.ResponseWriter, r *http.Request) {
