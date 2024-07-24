@@ -1,60 +1,48 @@
-import { Link } from "@nextui-org/link";
-import { Snippet } from "@nextui-org/snippet";
-import { Code } from "@nextui-org/code";
-import { button as buttonStyles } from "@nextui-org/theme";
-
-import { siteConfig } from "@/config/site";
-import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
+import axios from "axios";
 import DefaultLayout from "@/layouts/default";
+import { useEffect, useState } from "react";
 
 export default function IndexPage() {
-  return (
-    <DefaultLayout>
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <div className="inline-block max-w-lg text-center justify-center">
-          <h1 className={title()}>Make&nbsp;</h1>
-          <h1 className={title({ color: "violet" })}>beautiful&nbsp;</h1>
-          <br />
-          <h1 className={title()}>
-            websites regardless of your design experience.
-          </h1>
-          <h4 className={subtitle({ class: "mt-4" })}>
-            Beautiful, fast and modern React UI library.
-          </h4>
-        </div>
 
-        <div className="flex gap-3">
-          <Link
-            isExternal
-            className={buttonStyles({
-              color: "primary",
-              radius: "full",
-              variant: "shadow",
-            })}
-            href={siteConfig.links.docs}
-          >
-            Documentation
-          </Link>
-          <Link
-            isExternal
-            className={buttonStyles({ variant: "bordered", radius: "full" })}
-            href={siteConfig.links.github}
-          >
-            <GithubIcon size={20} />
-            GitHub
-          </Link>
-        </div>
+	interface SystemInfo {
+		hostname: string
+		memory: number
+		cpu: string
+		kernel: string
+		TotalDiskSpace: number
+		UsedDiskSpace: number
+	}
 
-        <div className="mt-8">
-          <Snippet hideCopyButton hideSymbol variant="bordered">
-            <span>
-              Get started by editing{" "}
-              <Code color="primary">pages/index.tsx</Code>
-            </span>
-          </Snippet>
-        </div>
-      </section>
-    </DefaultLayout>
-  );
+	const [systemInfo, setSystemInfo] = useState<SystemInfo>({})
+
+	const getSystemInfo = async () => {
+		try {
+			const response = await axios.get("http://localhost:8000/system")
+			console.log(response.data)
+			setSystemInfo(response.data)
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
+	useEffect(() => {
+		if (localStorage.getItem("token") === null) {
+			window.location.href = "/login"
+		}
+
+		getSystemInfo()
+	}, [])
+
+	return (
+		<DefaultLayout>
+			<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+				<p>{systemInfo.hostname}</p>
+				<p>{systemInfo.cpu}</p>
+				<p>{systemInfo.memory / 1024} GB</p>
+				<p>{systemInfo.kernel}</p>
+				<p>{systemInfo.TotalDiskSpace / 1024} GB</p>
+				<p>{systemInfo.UsedDiskSpace / 1024} GB</p>
+			</section>
+		</DefaultLayout>
+	);
 }
