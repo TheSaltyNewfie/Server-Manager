@@ -50,7 +50,8 @@ func RunCommand(w http.ResponseWriter, r *http.Request) {
 
 	command := cmd.Cmd
 
-	execCmd := exec.Command("sh", "-c", command)
+	// execCmd := exec.Command("sh", "-c", command)
+	execCmd := exec.Command("sudo", command) // TODO: This is extremely insecure, do not use this in production
 
 	output, err := execCmd.CombinedOutput()
 

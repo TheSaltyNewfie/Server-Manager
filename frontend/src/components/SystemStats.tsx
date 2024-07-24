@@ -1,4 +1,4 @@
-import { Card, CardBody, CardFooter } from "@nextui-org/card";
+import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Progress } from "@nextui-org/progress";
 import { Button } from "@nextui-org/button";
 import CustomModal from "@/components/modal";
@@ -6,6 +6,7 @@ import { ModalBody } from "@nextui-org/modal";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { siteConfig } from "@/config/site";
+import { Divider } from "@nextui-org/divider"
 
 export function SystemStats() {
     interface SystemInfo {
@@ -13,6 +14,7 @@ export function SystemStats() {
         totalMemory: number
         usedMemory: number
         cpu: string
+        cpuUsage: number
         kernel: string
         totalDiskSpace: number
         usedDiskSpace: number
@@ -23,6 +25,7 @@ export function SystemStats() {
     const [lowDiskSpace, setLowDiskSpace] = useState(false)
     const [confirmShutdown, setConfirmShutdown] = useState(false)
     const [confirmRestart, setConfirmRestart] = useState(false)
+    const [highCpuUsage, setHighCpuUsage] = useState(false)
 
     const getSystemInfo = async () => {
         try {
@@ -51,6 +54,15 @@ export function SystemStats() {
             setLowDiskSpace(false)
         }
 
+    }
+
+    const checkIfCpuUsageIsHigh = () => {
+        if (systemInfo.cpuUsage > 80) {
+            setHighCpuUsage(true)
+        }
+        else {
+            setHighCpuUsage(false)
+        }
     }
 
     const sendShutdownRequest = async () => {
@@ -83,9 +95,14 @@ export function SystemStats() {
     }
 
     useEffect(() => {
-        getSystemInfo()
-        checkIfRamIsLow()
-        checkIfDiskSpaceIsLow()
+        const intervalId = setInterval(() => {
+            getSystemInfo()
+            checkIfRamIsLow()
+            checkIfDiskSpaceIsLow()
+            checkIfCpuUsageIsHigh()
+        }, 1500)
+
+        return () => clearInterval(intervalId)
     }, [])
 
     return (
@@ -102,14 +119,25 @@ export function SystemStats() {
                 <ModalBody>
                     <p>Are you sure you want to restart the system?</p>
                     <Button color="danger" onClick={() => setConfirmRestart(false)}>No</Button>
-                    <Button color="success" onClick={() => setConfirmRestart(false)}>Yes</Button>
+                    <Button color="success" onClick={sendShutdownRequest}>Yes</Button>
                 </ModalBody>
             </CustomModal>
 
             <Card>
+                <CardHeader>System Stats</CardHeader>
+                <Divider />
                 <CardBody className="gap-4">
                     <p>Hostname: {systemInfo.hostname}</p>
-                    <p>CPU: {systemInfo.cpu}</p>
+                    <p>Kernel: {systemInfo.kernel}</p>
+                    <Divider />
+                    <Progress
+                        value={systemInfo.cpuUsage}
+                        maxValue={100}
+                        showValueLabel={true}
+                        color={highCpuUsage ? "danger" : "success"}
+                        label={`CPU: ${systemInfo.cpu}}`}
+                        formatOptions={{ style: "percent", maximumFractionDigits: 2 }}
+                    />
                     <Progress
                         value={systemInfo.usedMemory}
                         maxValue={systemInfo.totalMemory}
@@ -118,7 +146,6 @@ export function SystemStats() {
                         label={`RAM Usage: ${(systemInfo.totalMemory / 1024).toFixed(2)} GB Total`}
                         formatOptions={{ style: "percent", maximumFractionDigits: 2 }}
                     />
-                    <p>Kernel: {systemInfo.kernel}</p>
                     <Progress
                         value={systemInfo.usedDiskSpace}
                         maxValue={systemInfo.totalDiskSpace}
@@ -128,6 +155,7 @@ export function SystemStats() {
                         formatOptions={{ style: "percent", maximumFractionDigits: 2 }}
                     />
                 </CardBody>
+                <Divider />
                 <CardFooter className="gap-2">
                     <Button color="primary" onClick={() => setConfirmShutdown(true)}>Shutdown</Button>
                     <Button color="primary" onClick={() => setConfirmRestart(true)}>Restart</Button>
