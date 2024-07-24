@@ -64,6 +64,12 @@ func RunCommand(w http.ResponseWriter, r *http.Request) {
 		panic("Something failed here")
 	}
 
+	var auditLog models.AuditLog
+
+	auditLog.Action = command
+	auditLog.UserID = int(user.ID)
+	db.Save(&auditLog)
+
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(response)
 }
