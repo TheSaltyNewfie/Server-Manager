@@ -8,4 +8,5 @@ type User struct {
 	Name string `gorm:"size:255"`
 	Password string `gorm:"size:255"`
 	Role int // Admin role will always be 0!
+	Token string 
 }

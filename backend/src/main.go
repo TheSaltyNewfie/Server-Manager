@@ -17,6 +17,8 @@ func main() {
 	mux.HandleFunc("POST /users", controllers.CreateUser)
 	mux.HandleFunc("POST /command", controllers.RunCommand)
 	mux.HandleFunc("GET /containers", controllers.GetPodmanContainers)
+	mux.HandleFunc("POST /auth", controllers.AuthenticateUser)
+	mux.HandleFunc("GET /system", controllers.GetSystemInfo)
 
 
 	handler := corsMiddleware(mux)
