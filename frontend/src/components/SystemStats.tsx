@@ -2,9 +2,10 @@ import { Card, CardBody, CardFooter } from "@nextui-org/card";
 import { Progress } from "@nextui-org/progress";
 import { Button } from "@nextui-org/button";
 import CustomModal from "@/components/modal";
-import { Modal, ModalBody } from "@nextui-org/modal";
+import { ModalBody } from "@nextui-org/modal";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { siteConfig } from "@/config/site";
 
 export function SystemStats() {
     interface SystemInfo {
@@ -25,7 +26,7 @@ export function SystemStats() {
 
     const getSystemInfo = async () => {
         try {
-            const response = await axios.get("http://192.168.4.123:8000/system")
+            const response = await axios.get(`${siteConfig.api_endpoint}/system`)
             console.log(response.data)
             setSystemInfo(response.data)
         } catch (error) {
@@ -52,6 +53,35 @@ export function SystemStats() {
 
     }
 
+    const sendShutdownRequest = async () => {
+        try {
+            await axios.post(`${siteConfig.api_endpoint}/command`,
+                {
+                    cmd: "shutdown now",
+                    token: localStorage.getItem("token")
+                }
+            )
+            setConfirmShutdown(false)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const sendRestartRequest = async () => {
+        try {
+            await axios.post(`${siteConfig.api_endpoint}/command`,
+                {
+                    cmd: "restart",
+                    token: localStorage.getItem("token")
+                }
+            )
+            setConfirmRestart(false)
+        } catch (error) {
+            console.error(error)
+        }
+
+    }
+
     useEffect(() => {
         getSystemInfo()
         checkIfRamIsLow()
@@ -64,7 +94,7 @@ export function SystemStats() {
                 <ModalBody>
                     <p>Are you sure you want to shutdown the system?</p>
                     <Button color="danger" onClick={() => setConfirmShutdown(false)}>No</Button>
-                    <Button color="success" onClick={() => setConfirmShutdown(false)}>Yes</Button>
+                    <Button color="success" onClick={sendShutdownRequest}>Yes</Button>
                 </ModalBody>
             </CustomModal>
 
@@ -100,7 +130,7 @@ export function SystemStats() {
                 </CardBody>
                 <CardFooter className="gap-2">
                     <Button color="primary" onClick={() => setConfirmShutdown(true)}>Shutdown</Button>
-                    <Button color="primary">Restart</Button>
+                    <Button color="primary" onClick={() => setConfirmRestart(true)}>Restart</Button>
                 </CardFooter>
             </Card>
         </>

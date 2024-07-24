@@ -5,6 +5,7 @@ import { Button, ButtonGroup } from "@nextui-org/button"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
+import { siteConfig } from "@/config/site"
 
 export default function LoginPage() {
 
@@ -16,7 +17,7 @@ export default function LoginPage() {
     const login = async (e: any) => {
         e.preventDefault()
         try {
-            const response = await axios.post("http://192.168.4.123:8000/auth", {
+            const response = await axios.post(`${siteConfig.api_endpoint}/auth`, {
                 name: username,
                 password: password
             })

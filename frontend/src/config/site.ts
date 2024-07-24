@@ -23,4 +23,5 @@ export const siteConfig = {
 	links: {
 		github: 'https://github.com/TheSaltyNewfie/Server-Manager',
 	},
+	api_endpoint: 'http://192.168.4.123:8000',
 };
