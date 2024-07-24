@@ -1,15 +1,19 @@
 package controllers
 
 import (
+	"backend/src/models"
 	"encoding/json"
 	"net/http"
 	"os/exec"
+
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func RunCommand(w http.ResponseWriter, r *http.Request) {
 	var cmd struct {
 		Cmd string `json:"cmd"`
-		User int `json:"user"`
+		Token string `json:"token"`
 	}
 
 	var response struct {
@@ -20,6 +24,27 @@ func RunCommand(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	db, err := gorm.Open(sqlite.Open("database.db"), &gorm.Config{})
+	
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	var user models.User
+
+	db.Find(&user, "token = ?", cmd.Token)
+
+	if user.ID == 0 {
+		http.Error(w, "User not found", http.StatusNotFound)
+		return
+	}
+
+	if user.Role != 0 {
+		http.Error(w, "User is not an admin", http.StatusUnauthorized)
 		return
 	}
 

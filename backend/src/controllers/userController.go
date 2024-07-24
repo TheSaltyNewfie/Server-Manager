@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"backend/src/models"
+	"backend/src/utils"
 	"encoding/json"
 	"net/http"
 
@@ -40,6 +41,15 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	token, err := utils.GenerateJWT(string(user.Name))
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	user.Token = token
+
 	result := db.Create(&user)
 
 	if result.Error != nil {
@@ -48,5 +58,51 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(user)
+}
+
+func EditUser(w http.ResponseWriter, r *http.Request) {
+	db, err = gorm.Open(sqlite.Open("database.db"), &gorm.Config{})
+	
+	var user models.User
+
+	err := json.NewDecoder(r.Body).Decode(&user)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	result := db.Save(&user)
+
+	if result.Error != nil {
+		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(user)
+}
+
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	db, err = gorm.Open(sqlite.Open("database.db"), &gorm.Config{})
+	
+	var user models.User
+
+	err := json.NewDecoder(r.Body).Decode(&user)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	result := db.Delete(&user)
+
+	if result.Error != nil {
+		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(user)
 }
