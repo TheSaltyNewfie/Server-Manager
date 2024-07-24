@@ -156,3 +156,7 @@ dist
 .pnp.*
 
 *.db
+
+build/
+
+server
