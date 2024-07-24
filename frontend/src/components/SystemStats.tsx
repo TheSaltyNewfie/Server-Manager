@@ -135,7 +135,7 @@ export function SystemStats() {
                         maxValue={100}
                         showValueLabel={true}
                         color={highCpuUsage ? "danger" : "success"}
-                        label={`CPU: ${systemInfo.cpu}}`}
+                        label={`CPU: ${systemInfo.cpu}`}
                         formatOptions={{ style: "percent", maximumFractionDigits: 2 }}
                     />
                     <Progress
