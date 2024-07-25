@@ -67,7 +67,7 @@ export function SystemStats() {
 
     const sendShutdownRequest = async () => {
         try {
-            await axios.post(`${siteConfig.api_endpoint}/command`,
+            await axios.post(`${siteConfig.api_endpoint}/shutdown`,
                 {
                     cmd: "shutdown now",
                     token: localStorage.getItem("token")
@@ -81,7 +81,7 @@ export function SystemStats() {
 
     const sendRestartRequest = async () => {
         try {
-            await axios.post(`${siteConfig.api_endpoint}/command`,
+            await axios.post(`${siteConfig.api_endpoint}/reboot`,
                 {
                     cmd: "restart",
                     token: localStorage.getItem("token")
@@ -119,7 +119,7 @@ export function SystemStats() {
                 <ModalBody>
                     <p>Are you sure you want to restart the system?</p>
                     <Button color="danger" onClick={() => setConfirmRestart(false)}>No</Button>
-                    <Button color="success" onClick={sendShutdownRequest}>Yes</Button>
+                    <Button color="success" onClick={sendRestartRequest}>Yes</Button>
                 </ModalBody>
             </CustomModal>
 

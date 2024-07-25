@@ -21,8 +21,8 @@ export default function LoginPage() {
                 name: username,
                 password: password
             })
-            console.log(response.data)
-            localStorage.setItem("token", response.data.token)
+            console.log(response.data.Token)
+            localStorage.setItem("token", response.data.Token)
             naviagate("/")
         } catch (error) {
             console.error(error)

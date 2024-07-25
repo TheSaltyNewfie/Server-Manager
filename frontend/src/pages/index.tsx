@@ -2,6 +2,7 @@ import axios from "axios";
 import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
 import { SystemStats } from "@/components/SystemStats";
+import ShareList from "@/components/ShareList";
 
 export default function IndexPage() {
 
@@ -15,6 +16,7 @@ export default function IndexPage() {
 		<DefaultLayout>
 			<section className="flex flex-col flex-wrap justify-center gap-4 py-8 md:py-10">
 				<SystemStats />
+				<ShareList />
 			</section>
 		</DefaultLayout>
 	);

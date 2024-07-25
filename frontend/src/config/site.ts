@@ -24,4 +24,5 @@ export const siteConfig = {
 		github: 'https://github.com/TheSaltyNewfie/Server-Manager',
 	},
 	api_endpoint: 'http://192.168.4.123:8000',
+	ftp_endpoint: 'ftp://192.168.4.123:21',
 };

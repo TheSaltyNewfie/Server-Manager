@@ -16,6 +16,7 @@ func Init() {
 
 	db.AutoMigrate(&models.User{})
 	db.AutoMigrate(&models.AuditLog{})
+	db.AutoMigrate(&models.Share{})
 
 	// Always create an admin account, password should be changed by user
 	db.Create(&models.User{
