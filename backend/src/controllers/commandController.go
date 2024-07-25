@@ -50,8 +50,7 @@ func RunCommand(w http.ResponseWriter, r *http.Request) {
 
 	command := cmd.Cmd
 
-	// execCmd := exec.Command("sh", "-c", command)
-	execCmd := exec.Command("sudo", command) // TODO: This is extremely insecure, do not use this in production
+	execCmd := exec.Command("sh", "-c", command)
 
 	output, err := execCmd.CombinedOutput()
 
@@ -73,6 +72,32 @@ func RunCommand(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(response)
+}
+
+func RebootSystem(w http.ResponseWriter, r *http.Request) {
+	cmd := exec.Command("systemctl", "reboot")
+
+	_, err := cmd.CombinedOutput()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func ShutdownSystem(w http.ResponseWriter, r *http.Request) {
+	cmd := exec.Command("systemctl", "shutdown", "-h", "now")
+
+	_, err := cmd.CombinedOutput()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func GetPodmanContainers(w http.ResponseWriter, r *http.Request) {
