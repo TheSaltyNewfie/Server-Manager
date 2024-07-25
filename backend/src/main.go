@@ -21,6 +21,8 @@ func main() {
 	mux.HandleFunc("GET /system", controllers.GetSystemInfo)
 	mux.HandleFunc("POST /shutdown", controllers.ShutdownSystem)
 	mux.HandleFunc("POST /reboot", controllers.RebootSystem)
+	mux.HandleFunc("POST /share/create", controllers.CreateShare)
+	mux.HandleFunc("GET /share/list", controllers.GetShares)
 
 
 	handler := corsMiddleware(mux)

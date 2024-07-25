@@ -75,7 +75,7 @@ func RunCommand(w http.ResponseWriter, r *http.Request) {
 }
 
 func RebootSystem(w http.ResponseWriter, r *http.Request) {
-	cmd := exec.Command("systemctl", "reboot")
+	cmd := exec.Command("reboot")
 
 	_, err := cmd.CombinedOutput()
 
@@ -88,7 +88,7 @@ func RebootSystem(w http.ResponseWriter, r *http.Request) {
 }
 
 func ShutdownSystem(w http.ResponseWriter, r *http.Request) {
-	cmd := exec.Command("systemctl", "shutdown", "-h", "now")
+	cmd := exec.Command("shutdown")
 
 	_, err := cmd.CombinedOutput()
 
