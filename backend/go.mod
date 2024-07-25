@@ -7,6 +7,7 @@ require github.com/gorilla/mux v1.8.1
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
+	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect

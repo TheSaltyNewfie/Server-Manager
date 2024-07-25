@@ -24,7 +24,6 @@ func main() {
 	mux.HandleFunc("POST /share/create", controllers.CreateShare)
 	mux.HandleFunc("GET /share/list", controllers.GetShares)
 
-
 	handler := corsMiddleware(mux)
 
 	http.ListenAndServe("0.0.0.0:8000", handler)
