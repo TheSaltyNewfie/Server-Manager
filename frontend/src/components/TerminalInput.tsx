@@ -9,32 +9,38 @@ import 'xterm/css/xterm.css'
 
 export default function TerminalInput() {
     const terminalRef = useRef<HTMLDivElement>(null)
-    const terminal = new Terminal()
-    const fitAddon = new FitAddon()
-    const socket = io(`${siteConfig.xterm_endpoint}`)
+    const terminalInstanceRef = useRef<Terminal | null>(null)
 
     useEffect(() => {
-        terminal.loadAddon(fitAddon)
-        terminal.open(terminalRef.current as HTMLDivElement)
-        fitAddon.fit()
-        terminal.focus()
+        if (terminalRef.current) {
+            const term = new Terminal()
+            const fitAddon = new FitAddon()
+            term.loadAddon(fitAddon)
+            term.open(terminalRef.current)
+            fitAddon.fit()
+            terminalInstanceRef.current = term
 
-        socket.on('connect', () => {
-            console.log('Connected to server')
-        })
+            const socket = new WebSocket(siteConfig.xterm_endpoint)
 
-        socket.on('data', (data: any) => {
-            terminal.write(data)
-        })
+            socket.onopen = () => {
+                console.log('Connected to server')
+            }
 
-        terminal.onData((data) => {
-            socket.emit('data', data)
-        })
+            socket.onmessage = (event) => {
+                term.write(event.data)
+            }
 
-        return () => {
-            socket.disconnect()
+            term.onData((data) => {
+                socket.send(data)
+            })
+
+            return () => {
+                socket.close()
+                term.dispose()
+            }
         }
-    })
+
+    }, [])
 
     return (
         <Card>
