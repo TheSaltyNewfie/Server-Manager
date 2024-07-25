@@ -3,6 +3,7 @@ import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Button } from "@nextui-org/button"
+import { Divider } from "@nextui-org/divider";
 
 export default function ShareList() {
     const [shares, setShares] = useState([])
@@ -31,7 +32,8 @@ export default function ShareList() {
 
     return (
         <Card>
-            <CardHeader>Share List</CardHeader>
+            <CardHeader className="text-xl">Share List</CardHeader>
+            <Divider />
             <CardBody>
                 {
                     shares.map((key: any, index: any) => (
@@ -39,6 +41,7 @@ export default function ShareList() {
                             <CardHeader className="text-xl">
                                 <p>{key.ShareName}</p>
                             </CardHeader>
+                            <Divider />
                             <CardBody>
                                 <p>{key.ShareDesc}</p>
                             </CardBody>
@@ -49,7 +52,6 @@ export default function ShareList() {
                     ))
                 }
             </CardBody>
-            <CardFooter>Share List</CardFooter>
         </Card>
     );
 }
