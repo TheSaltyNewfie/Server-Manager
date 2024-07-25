@@ -13,6 +13,10 @@ export const siteConfig = {
 			label: 'Shares',
 			href: '/shares',
 		},
+		{
+			label: 'Terminal',
+			href: '/terminal',
+		},
 	],
 	navMenuItems: [
 		{
@@ -22,6 +26,10 @@ export const siteConfig = {
 		{
 			label: 'Shares',
 			href: '/shares',
+		},
+		{
+			label: 'Terminal',
+			href: '/terminal',
 		},
 		{
 			label: 'Logout',
