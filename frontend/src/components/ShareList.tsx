@@ -34,7 +34,7 @@ export default function ShareList() {
         <Card>
             <CardHeader className="text-xl">Share List</CardHeader>
             <Divider />
-            <CardBody>
+            <CardBody className="gap-2">
                 {
                     shares.map((key: any, index: any) => (
                         <Card key={index}>

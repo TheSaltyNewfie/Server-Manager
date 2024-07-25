@@ -9,11 +9,19 @@ export const siteConfig = {
 			label: 'Home',
 			href: '/',
 		},
+		{
+			label: 'Shares',
+			href: '/shares',
+		},
 	],
 	navMenuItems: [
 		{
 			label: 'Home',
 			href: '/',
+		},
+		{
+			label: 'Shares',
+			href: '/shares',
 		},
 		{
 			label: 'Logout',
