@@ -53,3 +53,36 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(user)
 }
+
+func CheckToken(w http.ResponseWriter, r *http.Request) {
+	var token struct {
+		Token string `json:"token"`
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&token)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	db, err := gorm.Open(sqlite.Open("database.db"), &gorm.Config{})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	var user models.User
+	result := db.Where("token = ?", token.Token).First(&user)
+
+	if result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		} else {
+			http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(user)
+}

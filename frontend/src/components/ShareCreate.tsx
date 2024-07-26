@@ -16,11 +16,8 @@ export default function ShareCreate() {
         const token = localStorage.getItem("token")
         await axios.post(`${siteConfig.api_endpoint}/share/create`, {
             shareName: shareName,
-            shareDesc: shareDesc
-        }, {
-            headers: {
-                Authorization: token
-            }
+            shareDesc: shareDesc,
+            Token: token
         })
     }
 
