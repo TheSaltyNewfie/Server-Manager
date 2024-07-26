@@ -9,11 +9,27 @@ export const siteConfig = {
 			label: 'Home',
 			href: '/',
 		},
+		{
+			label: 'Shares',
+			href: '/shares',
+		},
+		{
+			label: 'Terminal',
+			href: '/terminal',
+		},
 	],
 	navMenuItems: [
 		{
 			label: 'Home',
 			href: '/',
+		},
+		{
+			label: 'Shares',
+			href: '/shares',
+		},
+		{
+			label: 'Terminal',
+			href: '/terminal',
 		},
 		{
 			label: 'Logout',
@@ -25,4 +41,5 @@ export const siteConfig = {
 	},
 	api_endpoint: 'http://192.168.4.123:8000',
 	ftp_endpoint: 'ftp://192.168.4.123:21',
+	xterm_endpoint: 'ws://192.168.4.123:3001',
 };
