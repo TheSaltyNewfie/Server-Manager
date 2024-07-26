@@ -18,6 +18,7 @@ func main() {
 	mux.HandleFunc("POST /command", controllers.RunCommand)
 	mux.HandleFunc("GET /containers", controllers.GetPodmanContainers)
 	mux.HandleFunc("POST /auth", controllers.AuthenticateUser)
+	mux.HandleFunc("POST /auth/check", controllers.CheckToken)
 	mux.HandleFunc("GET /system", controllers.GetSystemInfo)
 	mux.HandleFunc("POST /shutdown", controllers.ShutdownSystem)
 	mux.HandleFunc("POST /reboot", controllers.RebootSystem)
