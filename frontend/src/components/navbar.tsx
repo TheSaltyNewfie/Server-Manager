@@ -21,6 +21,7 @@ import {
 } from "@/components/icons";
 
 import { useNavigate } from "react-router-dom"
+import { User } from "@nextui-org/user"
 
 export const Navbar = () => {
 

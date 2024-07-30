@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"backend/src/models"
+	"backend/src/types"
 	"encoding/json"
+	"log"
 	"net/http"
 	"os/exec"
 
@@ -101,15 +103,18 @@ func ShutdownSystem(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPodmanContainers(w http.ResponseWriter, r *http.Request) {
-	cmd := exec.Command("podman", "ps", "-a")
+	cmd := exec.Command("podman", "ps", "-a", "--format", "json")
+    output, err := cmd.Output()
+    if err != nil {
+        log.Fatal(err)
+    }
 
-	output, err := cmd.CombinedOutput()
-
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+    var containers []types.Container
+    err = json.Unmarshal(output, &containers)
+    if err != nil {
+        log.Fatal(err)
+    }
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(output)
+	json.NewEncoder(w).Encode(containers)
 }
