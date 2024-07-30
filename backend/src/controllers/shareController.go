@@ -70,6 +70,12 @@ func CreateShare(w http.ResponseWriter, r *http.Request) {
 		ShareDesc: info.ShareDesc,
 	}
 
+	audit := models.AuditLog{
+		UserID: user.ID,
+		Action: "Created share " + share.ShareName,
+	}
+
+	db.Create(&audit)
 	db.Create(&share)
 
 

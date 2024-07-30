@@ -17,6 +17,10 @@ export const siteConfig = {
 			label: 'Terminal',
 			href: '/terminal',
 		},
+		{
+			label: 'Podman',
+			href: '/podman',
+		},
 	],
 	navMenuItems: [
 		{
@@ -30,6 +34,10 @@ export const siteConfig = {
 		{
 			label: 'Terminal',
 			href: '/terminal',
+		},
+		{
+			label: 'Podman',
+			href: '/podman',
 		},
 		{
 			label: 'Logout',
