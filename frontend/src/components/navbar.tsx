@@ -21,6 +21,7 @@ import {
 } from "@/components/icons";
 
 import { useNavigate } from "react-router-dom"
+import { User } from "@nextui-org/user"
 
 export const Navbar = () => {
 
@@ -63,6 +64,7 @@ export const Navbar = () => {
 						<GithubIcon className="text-default-500" />
 					</Link>
 					<ThemeSwitch />
+					<User>d</User>
 				</NavbarItem>
 			</NavbarContent>
 

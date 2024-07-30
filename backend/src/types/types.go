@@ -4,3 +4,10 @@ package types
 type Response struct {
 	Message string `json:"message"`
 }
+
+type Container struct {
+	Id string `json:"Id"`
+	Image string `json:"Image"`
+	Status string `json:"Status"`
+	Names []string `json:"Names"`
+}
