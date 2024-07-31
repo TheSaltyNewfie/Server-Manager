@@ -21,6 +21,7 @@ export default function UsersPage() {
     const [users, setUsers] = useState([])
     const [editModal, setEditModal] = useState(false)
     const [createModal, setCreateModal] = useState(false)
+    const [warningModal, setWarningModal] = useState(false)
 
     const [username, setUsername] = useState("")
     const [role, setRole] = useState(0)
@@ -56,6 +57,10 @@ export default function UsersPage() {
             Password: password,
             ID: id
         })
+
+        setEditModal(false)
+
+        window.location.reload()
     }
 
     const handleCreateClick = () => {
@@ -72,6 +77,25 @@ export default function UsersPage() {
             Role: role,
             Password: password
         })
+
+        setCreateModal(false)
+        window.location.reload()
+    }
+
+    const handleDeleteClick = (id: any) => {
+        setId(id)
+        setWarningModal(true)
+    }
+
+    const handleDeleteConfirm = async () => {
+        await axios.delete(`${siteConfig.api_endpoint}/users`, {
+            data: {
+                ID: id
+            }
+        })
+
+        setWarningModal(false)
+        window.location.reload()
     }
 
     useEffect(() => {
@@ -117,6 +141,14 @@ export default function UsersPage() {
                 </ModalBody>
             </CustomModal>
 
+            <CustomModal isOpen={warningModal} onClose={() => setWarningModal(false)}>
+                <ModalBody>
+                    <h1>Delete user?</h1>
+                    <p>You will be deleting this user ID: {id}</p>
+                    <Button color="danger" onClick={async () => await handleDeleteConfirm()}>Delete</Button>
+                </ModalBody>
+            </CustomModal>
+
             <CustomModal isOpen={editModal} onClose={() => setEditModal(false)}>
                 <ModalBody>
                     <h1>Edit User</h1>
@@ -158,7 +190,7 @@ export default function UsersPage() {
                                     <TableCell>{user.Role}</TableCell>
                                     <TableCell className="flex gap-2">
                                         <Button onClick={() => handleEditClick({ username: user.Name, role: user.Role, id: user.ID })} color="primary">Edit</Button>
-                                        <Button color="danger">Delete</Button>
+                                        <Button onClick={() => handleDeleteClick(user.ID)} color="danger">Delete</Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
