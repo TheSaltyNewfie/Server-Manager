@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { Container } from "@/types"
 import { Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from "@nextui-org/table";
 import { Button } from "@nextui-org/button"
+import { useNavigate } from "react-router-dom"
 
 export default function PodmanContainers(containers: any) {
 
@@ -14,6 +15,8 @@ export default function PodmanContainers(containers: any) {
         { key: 'Image', label: 'Image' },
         { key: 'Actions', label: 'Actions' }
     ]
+
+    let navigate = useNavigate()
 
     const shutdownPod = async (name: any) => {
         await axios.post(`${siteConfig.api_endpoint}/command`,
@@ -34,6 +37,20 @@ export default function PodmanContainers(containers: any) {
     }
 
     useEffect(() => {
+        const checkAuth = async () => {
+            const res = await axios.post(`${siteConfig.api_endpoint}/auth/check`, {
+                token: localStorage.getItem("token")
+            }).catch((err) => {
+                navigate("/login")
+            })
+
+            if (res.data.Role != 0) {
+                navigate("/login")
+            }
+        }
+
+        checkAuth()
+
         console.log(containers)
     }, [])
 

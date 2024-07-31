@@ -21,6 +21,10 @@ export const siteConfig = {
 			label: 'Podman',
 			href: '/podman',
 		},
+		{
+			label: 'Users',
+			href: '/users',
+		},
 	],
 	navMenuItems: [
 		{

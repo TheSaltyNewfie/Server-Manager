@@ -22,6 +22,19 @@ export default function IndexPage() {
 		}
 
 		checkToken()
+
+		const checkAuth = async () => {
+			const res = await axios.post(`${siteConfig.api_endpoint}/auth/check`, {
+				token: localStorage.getItem("token")
+			}).catch((err) => {
+				window.location.href = "/login"
+			})
+
+			if (res.data.Role > 1) {
+				window.location.href = "/login"
+			}
+		}
+		checkAuth()
 	}, [])
 
 	return (

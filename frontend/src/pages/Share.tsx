@@ -12,6 +12,19 @@ export default function SharePage() {
             window.location.href = "/login"
         }
 
+        const checkAuth = async () => {
+            const res = await axios.post(`${siteConfig.api_endpoint}/auth/check`, {
+                token: localStorage.getItem("token")
+            }).catch((err) => {
+                window.location.href = "/login"
+            })
+
+            if (res.data.Role != 0) {
+                window.location.href = "/login"
+            }
+        }
+        checkAuth()
+
         const checkToken = async () => {
             await axios.post(`${siteConfig.api_endpoint}/auth/check`, {
                 Token: localStorage.getItem("token")
