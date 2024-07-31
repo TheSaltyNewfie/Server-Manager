@@ -19,6 +19,19 @@ export default function PodmanPage() {
 
 
     useEffect(() => {
+        const checkAuth = async () => {
+            const res = await axios.post(`${siteConfig.api_endpoint}/auth/check`, {
+                token: localStorage.getItem("token")
+            }).catch((err) => {
+                window.location.href = "/login"
+            })
+
+            if (res.data.Role != 0) {
+                window.location.href = "/login"
+            }
+        }
+        checkAuth()
+
         fetchPodman()
     }, [])
 

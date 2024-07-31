@@ -1,7 +1,4 @@
-import { Button } from "@nextui-org/button";
-import { Kbd } from "@nextui-org/kbd";
 import { Link } from "@nextui-org/link";
-import { Input } from "@nextui-org/input";
 import {
 	Navbar as NextUINavbar,
 	NavbarBrand,
@@ -19,9 +16,6 @@ import { ThemeSwitch } from "@/components/theme-switch";
 import {
 	GithubIcon
 } from "@/components/icons";
-
-import { useNavigate } from "react-router-dom"
-import { User } from "@nextui-org/user"
 
 export const Navbar = () => {
 
