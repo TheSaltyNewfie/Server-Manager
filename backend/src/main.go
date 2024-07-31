@@ -16,6 +16,7 @@ func main() {
 	mux.HandleFunc("GET /users", controllers.GetUsers)
 	mux.HandleFunc("POST /users", controllers.CreateUser)
 	mux.HandleFunc("PUT /users", controllers.EditUser)
+	mux.HandleFunc("DELETE /users", controllers.DeleteUser)
 	mux.HandleFunc("POST /command", controllers.RunCommand)
 	mux.HandleFunc("GET /containers", controllers.GetPodmanContainers)
 	mux.HandleFunc("POST /auth", controllers.AuthenticateUser)
